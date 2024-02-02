@@ -68,7 +68,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   const currentUser = await User.findById(decode.id);
   if (!currentUser) next(new AppError('This user does not exist!', 401));
   if (currentUser.changedPassword(decode.iat))
-    next(new AppError('Your password has been changed!', 400));
+    return next(new AppError('Your password has been changed!', 400));
   req.user = currentUser;
   next();
 });

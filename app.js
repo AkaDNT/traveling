@@ -6,6 +6,7 @@ const sanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const path = require('path');
+const cookiesParser = require('cookies-parser');
 const AppError = require('./Utils/appError');
 const globalErrorHandling = require('./Controller/errorController');
 const tourRouter = require('./Routes/tourRoutes');
@@ -19,6 +20,7 @@ console.log(process.env.NODE_ENV);
 // if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 app.use(express.json());
+app.use(cookiesParser);
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000,
