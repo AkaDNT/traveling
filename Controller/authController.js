@@ -59,6 +59,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   )
     token = req.headers.authorization.split(' ')[1];
+  if (req.cookies) token = req.cookies.jwt;
   if (!token) {
     return next(
       new AppError('You are not logged in! Please log in to get access.', 401),
@@ -70,6 +71,25 @@ exports.protect = catchAsync(async (req, res, next) => {
   if (currentUser.changedPassword(decode.iat))
     return next(new AppError('Your password has been changed!', 400));
   req.user = currentUser;
+  next();
+});
+
+exports.loggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    try {
+      const decode = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRETKEY,
+      );
+      const currentUser = await User.findById(decode.id);
+      if (!currentUser) return next();
+      if (currentUser.changedPassword(decode.iat)) return next();
+      res.locals.user = currentUser;
+      return next();
+    } catch (err) {
+      return next();
+    }
+  }
   next();
 });
 
