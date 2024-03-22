@@ -23,7 +23,13 @@ exports.getTourSlug = catchAsync(async (req, res) => {
 exports.login = catchAsync(async (req, res) => {
   const tours = await Tour.find();
   res.status(200).render('login', {
-    title: 'login',
+    title: 'Login',
     tours,
+  });
+});
+
+exports.getAccount = catchAsync(async (req, res) => {
+  res.status(200).render('account', {
+    title: 'Account setting',
   });
 });

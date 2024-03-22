@@ -1,6 +1,5 @@
 extends base
 block content
-    script(src="/js/login.js" defer)
     main.main
         .login-form
             h2.heading-secondary.ma-bt-lg Log into your account
@@ -11,5 +10,6 @@ block content
                 .form__group.ma-bt-md
                     label.form__label(for='password') Password
                     input#password.form__input(type='password', placeholder='••••••••', required, minlength='8')
+                    div.end__form__input
                 .form__group
                     button.btn.btn--green Login

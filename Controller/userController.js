@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+const { promisify } = require('util');
 const User = require('../Model/userModel');
 const catchAsync = require('../Utils/catchAsync');
 const handleFactory = require('./handleFactory');
@@ -29,6 +31,18 @@ exports.updateUserData = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: user,
+  });
+});
+
+exports.getMe = catchAsync(async (req, res, next) => {
+  const decode = await promisify(jwt.verify)(
+    req.cookies.jwt,
+    process.env.JWT_SECRETKEY,
+  );
+  const me = await User.findById(decode.id);
+  res.status(200).json({
+    status: 'success',
+    data: me,
   });
 });
 

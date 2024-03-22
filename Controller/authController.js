@@ -52,6 +52,14 @@ exports.login = catchAsync(async (req, res, next) => {
   sendToken(userAcc, res, 201);
 });
 
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'You are logged out', {
+    expires: new Date(Date.now() + 5000),
+    httpOnly: true,
+  });
+  res.status(200).json({ status: 'success' });
+};
+
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
   if (
@@ -71,6 +79,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   if (currentUser.changedPassword(decode.iat))
     return next(new AppError('Your password has been changed!', 400));
   req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
 
@@ -84,6 +93,7 @@ exports.loggedIn = catchAsync(async (req, res, next) => {
       const currentUser = await User.findById(decode.id);
       if (!currentUser) return next();
       if (currentUser.changedPassword(decode.iat)) return next();
+      req.user = currentUser;
       res.locals.user = currentUser;
       return next();
     } catch (err) {
