@@ -9,7 +9,6 @@ const filterField = (obj, ...keys) => {
   Object.keys(obj).forEach((val) => {
     if (keys.includes(val)) newObj[val] = obj[val];
   });
-  console.log(newObj);
   return newObj;
 };
 
