@@ -72,7 +72,6 @@ schema.methods.correctPass = async function (candidatePass, userPass) {
 schema.methods.changedPassword = function (timeCreate) {
   if (this.changedPasswordAt) {
     const timeStamp = parseInt(this.changedPasswordAt.getTime(), 10) / 1000;
-    console.log(timeStamp, timeCreate);
     return timeStamp > timeCreate;
   }
   return false;

@@ -3,6 +3,7 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
 import axios from 'axios';
+import { errMsg } from './errMsg';
 
 export const login = async (email, password) => {
   try {
@@ -21,11 +22,10 @@ export const login = async (email, password) => {
       }, 100);
     }
   } catch (err) {
+    window.setTimeout(() => {
+      errMsg(err.response.data.message, '.end__form__input', 'beforeend');
+    }, 1000);
     // eslint-disable-next-line no-alert
-    const markup = `<div class="errMsg">Wrong email or password</div>`;
-    document
-      .querySelector('.end__form__input')
-      .insertAdjacentHTML('beforeend', markup);
   }
 };
 
